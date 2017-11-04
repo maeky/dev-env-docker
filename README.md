@@ -16,7 +16,6 @@ Run the container with:
 
 ```
 docker run -d \
-  --user 
   -h devbox \
   -e AUTHORIZED_GH_USERS="ksoderstrom" \
   -p 0.0.0.0:31122:22 \

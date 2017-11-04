@@ -8,6 +8,7 @@ RUN echo "debconf debconf/frontend select Teletype" | debconf-set-selections
 RUN apt-get update && apt-get install -y software-properties-common ca-certificates
 RUN add-apt-repository ppa:martin-frost/thoughtbot-rcm
 RUN add-apt-repository ppa:neovim-ppa/unstable
+
 # common packages
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y \
@@ -36,6 +37,7 @@ RUN apt-get install -y \
       mosh \
       sudo
 
+# stuff usually needed for ruby dev
 RUN apt-get install -y \
   zlib1g-dev \
   libssl-dev \
@@ -59,8 +61,10 @@ RUN make
 RUN make install
 RUN rm -rf /usr/local/src/tmux*
 
+# use nvim instead of vim
 RUN ln -s /usr/bin/nvim /usr/local/bin/vim
 
+# install ssh
 RUN apt-get install -y openssh-server &&\
     mkdir /var/run/sshd &&\
     echo "AllowAgentForwarding yes" >> /etc/ssh/sshd_config
@@ -73,8 +77,11 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen
 ENV LANG en_US.utf8
 
+# github-auth is needed to grab public ssh keys
 RUN gem install github-auth --no-document
 
+
+# setup user
 ARG UID=1000
 ARG GID=1000
 RUN groupadd -g $GID dev
@@ -92,18 +99,6 @@ RUN rbenv install 2.4.2
 RUN rbenv global 2.4.2
 
 ADD ssh_key_adder.rb /home/dev/bin/ssh_key_adder.rb
-#RUN AUTHORIZED_GH_USERS=ksoderstrom /home/dev/ssh_key_adder.rb
-
-# create docker group and app user
-# RUN groupadd -g 999 docker \
-#     && useradd \
-#         -G sudo,docker \
-#         -d /home/app \
-#         -m \
-#         -p $(openssl passwd 123app4) \
-#         -s $(which zsh) \
-#         app
-# USER app
 
 # install zim
 RUN git clone --recursive https://github.com/Eriner/zim.git /home/dev/.zim
