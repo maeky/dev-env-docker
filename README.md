@@ -4,24 +4,21 @@ This is my personal dev environment. Heavily based on [dpeterson/dev-container-*
 
 ## Building
 
-Build and tag it using the following command:
+Build the docker-compose project with:
 
 ```
-docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t ksoderstrom/dev .
+COMPOSE_PROJECT_NAME=`whoami` docker-compose build
 ```
 
 ## Starting
 
-Run the container with:
+Run the containers with:
 
 ```
-docker run -d \
-  -h devbox \
-  -e AUTHORIZED_GH_USERS="ksoderstrom" \
-  -p 0.0.0.0:31122:22 \
-  -v /home/ks/code:/home/dev/code \
-  ksoderstrom/dev:latest
+COMPOSE_PROJECT_NAME=`whoami` docker-compose up -d
 ```
+
+This will launch the devbox and a postgres container.
 
 ## Connecting
 
@@ -37,7 +34,9 @@ Host devbox
   UserKnownHostsFile=/dev/null
 ```
 
-and then connect using `ssh devbox`
+and then connect using `ssh devbox`.
+
+It's possible to connect to the postgres container using the hostname `postgres`.
 
 ## TODO
 
