@@ -35,7 +35,10 @@ RUN apt-get install -y \
       openssh-client \
       direnv \
       mosh \
-      sudo
+      sudo \
+      whois \
+      dnsutils \
+      traceroute
 
 # stuff usually needed for ruby dev
 RUN apt-get install -y \
