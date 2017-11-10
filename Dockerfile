@@ -31,11 +31,15 @@ RUN apt-get install -y \
       zsh \
       rcm \
       neovim \
+      python3-neovim \
       ctags \
       openssh-client \
       direnv \
       mosh \
-      sudo
+      sudo \
+      whois \
+      dnsutils \
+      traceroute
 
 # stuff usually needed for ruby dev
 RUN apt-get install -y \
@@ -114,7 +118,7 @@ RUN git clone --recursive https://github.com/Eriner/zim.git /home/dev/.zim
 # install vim plugins
 RUN curl -fLo /home/dev/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
-    && vim +PlugInstall +qall
+    && vim +PlugInstall +UpdateRemotePlugins +qall
 
 # tmux plugin manager
 RUN git clone https://github.com/tmux-plugins/tpm /home/dev/.tmux/plugins/tpm
