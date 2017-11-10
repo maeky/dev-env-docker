@@ -100,12 +100,16 @@ RUN rbenv global 2.4.2
 
 ADD ssh_key_adder.rb /home/dev/bin/ssh_key_adder.rb
 
+# clone dotfiles
+RUN git clone https://github.com/ksoderstrom/dotfiles.git /home/dev/.dotfiles
+RUN git -C /home/dev/.dotfiles remote set-url origin git@github.com:ksoderstrom/dotfiles.git
+RUN rcup
+
+# install n
+RUN curl -L https://git.io/n-install | bash -s -- -y
+
 # install zim
 RUN git clone --recursive https://github.com/Eriner/zim.git /home/dev/.zim
-
-# clone dotfiles
-RUN git clone https://github.com/ksoderstrom/dotfiles /home/dev/.dotfiles
-RUN rcup
 
 # install vim plugins
 RUN curl -fLo /home/dev/.local/share/nvim/site/autoload/plug.vim --create-dirs \
