@@ -1,13 +1,16 @@
 version: '2'
 services:
   devbox:
-    build: .
+    build:
+      context: .
+      args:
+        UID: ${DOCKER_UID}
+        GID: ${DOCKER_GID}
     hostname: devbox
-    environment:
-      - AUTHORIZED_GH_USERS="ksoderstrom"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - /home/ks/.ssh:/home/dev/.ssh
       - code:/home/dev/code
     ports:
       - "31122:22"

@@ -10,8 +10,8 @@ RUN add-apt-repository ppa:martin-frost/thoughtbot-rcm
 RUN add-apt-repository ppa:neovim-ppa/unstable
 
 # common packages
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
       build-essential \
       locales \
       curl \
@@ -21,9 +21,6 @@ RUN apt-get install -y \
       libevent-dev \
       net-tools \
       netcat-openbsd \
-      ruby \
-      rubygems \
-      ruby-dev \
       silversearcher-ag \
       socat \
       tzdata \
@@ -51,8 +48,7 @@ RUN apt-get install -y \
   libxslt-dev \
   libffi-dev \
   libsqlite3-dev \
-  libpq-dev \
-  nodejs
+  libpq-dev
 
 # install tmux
 ENV tmux_version 2.6
@@ -81,10 +77,6 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen
 ENV LANG en_US.utf8
 
-# github-auth is needed to grab public ssh keys
-RUN gem install github-auth --no-document
-
-
 # setup user
 ARG UID=1000
 ARG GID=1000
@@ -101,8 +93,6 @@ RUN git clone https://github.com/rbenv/ruby-build.git /home/dev/.rbenv/plugins/r
 ENV PATH /home/dev/.rbenv/bin:$PATH
 RUN rbenv install 2.4.2
 RUN rbenv global 2.4.2
-
-ADD ssh_key_adder.rb /home/dev/bin/ssh_key_adder.rb
 
 # clone dotfiles
 RUN git clone https://github.com/ksoderstrom/dotfiles.git /home/dev/.dotfiles
@@ -129,4 +119,4 @@ EXPOSE 22
 RUN mkdir /home/dev/code
 VOLUME /home/dev/code
 
-CMD /home/dev/bin/ssh_key_adder.rb && sudo /usr/sbin/sshd -D
+CMD sudo /usr/sbin/sshd -D
